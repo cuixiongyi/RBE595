@@ -2,11 +2,14 @@ __author__ = 'xiongyi'
 import ThreeDOF
 from LineSegment import *
 import SimulatorUtility
+import threading
+import tkinter as tk
 
+class Simulator(threading.Thread):
 
-class Simulator:
-
-    def __init__(self):
+    def __init__(self, f, canvas):
+        self.fig = f
+        self.canvas = canvas
         self.pathTrackOn = True;
         self.height = 400
         self.width = 600
@@ -14,13 +17,17 @@ class Simulator:
         self.TIMEINC = 0.1
         self.robotDOF = ThreeDOF.ThreeDOF()
         self.utility = SimulatorUtility.SimulatorUtility(self)
-        self.obstacle = SimulatorUtility.SimulatorUtility.initObstacles(self)
+        self.obstacles = self.utility.initObstacles(self)
+        # threading.Thread.run()
 
-    def nextStep(self):
+
+    def run(self):
         self.time += self.TIMEINC
         print(self.robotDOF.xy.x, self.robotDOF.xy.y, self.robotDOF.theta)
-        SimulatorUtility.SimulatorUtility.drawSimulator(self);
-
+        self.utility.drawSimulator(self);
+        self.canvas.draw()
+        self.canvas.flush_events()
+        self.canvas.show()
         return True
 
     def TurnOnOffPathTrack(self, withPathTrack):
@@ -44,17 +51,8 @@ class Simulator:
             return False
 
     def checkMovement(self, lineMovement):
-        for obs in self.obstacle:
+        for obs in self.obstacles:
             if obs.checkLineSegCross(lineMovement) is not None:
                 return False
         else:
             return True
-
-
-
-if __name__ == '__main__':
-    import threading
-    sim = Simulator()
-    sim.nextStep()
-    t = threading.Timer(.5, sim.nextStep())
-    t.start();
