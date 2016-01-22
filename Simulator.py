@@ -3,7 +3,10 @@ import ThreeDOF
 from LineSegment import *
 import SimulatorUtility
 import threading
+import math
+import random
 import tkinter as tk
+import numpy as np
 
 class Simulator(threading.Thread):
 
@@ -17,17 +20,22 @@ class Simulator(threading.Thread):
         self.TIMEINC = 0.1
         self.robotDOF = ThreeDOF.ThreeDOF()
         self.utility = SimulatorUtility.SimulatorUtility(self)
+        self.inputMove = ThreeDOF.ThreeDOF()
         self.obstacles = self.utility.initObstacles(self)
         # threading.Thread.run()
 
 
     def run(self):
-        self.time += self.TIMEINC
         print(self.robotDOF.xy.x, self.robotDOF.xy.y, self.robotDOF.theta)
+
+        self.time += self.TIMEINC
+        self.inputMove.xy.x = random.uniform(3,7)
+        self.inputMove.xy.y = random.uniform(3,7)
+        self.moveTo(self.inputMove)
         self.utility.drawSimulator(self);
         self.canvas.draw()
         self.canvas.flush_events()
-        self.canvas.show()
+        # self.canvas.show()
         return True
 
     def TurnOnOffPathTrack(self, withPathTrack):
@@ -36,23 +44,27 @@ class Simulator(threading.Thread):
         else:
             self.pathTrackOn = False
 
-    def moveTo(self, inputDOF):
-        lineMovement = LineSegment.LineSegment(self.robotDOF.xy.x,
+    def moveTo(self, inputMoveDOF):
+        lineMovement = LineSegment(self.robotDOF.xy.x,
                                                self.robotDOF.xy.y,
-                                               inputDOF.xy.x,
-                                               inputDOF.xy.y)
+                                               inputMoveDOF.xy.x,
+                                               inputMoveDOF.xy.y)
 
         if self.checkMovement(lineMovement):
-            self.robotDOF.xy.x = self.robotDOF.xy.x + inputDOF.xy.x
-            self.robotDOF.xy.y = self.robotDOF.xy.y + inputDOF.xy.y
-            self.robotDOF.xy.theta = self.robotDOF.xy.theta + inputDOF.xy.theta
+            self.robotDOF.xy.x = self.robotDOF.xy.x + inputMoveDOF.xy.x
+            self.robotDOF.xy.y = self.robotDOF.xy.y + inputMoveDOF.xy.y
+            self.robotDOF.xy.theta = self.robotDOF.theta + inputMoveDOF.theta
             return True
         else:
             return False
 
+    # inpute relative translation
     def checkMovement(self, lineMovement):
         for obs in self.obstacles:
-            if obs.checkLineSegCross(lineMovement) is not None:
+            ret = obs.checkLineSegCross(lineMovement)
+            # print(ret)
+            if ret is not None:
+                print(ret)
                 return False
         else:
             return True

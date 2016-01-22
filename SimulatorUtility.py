@@ -2,9 +2,16 @@ import ThreeDOF
 from LineSegment import *
 import matplotlib.pyplot as plt
 import matplotlib.lines as mline
+import math
+import numpy as np
 __author__ = 'xiongyi'
 
 obstaclesStyle = '-b'
+robotDiamiter = 12;
+
+circleStep = 50
+robotBodyX = np.cos(np.linspace(0,2*math.pi, num=circleStep))*robotDiamiter
+robotBodyY = np.sin(np.linspace(0,2*math.pi, num=circleStep))*robotDiamiter
 
 class SimulatorUtility:
     def __init__(self, sim):
@@ -61,22 +68,28 @@ class SimulatorUtility:
 
         # plt.plot([lineSeg.sx,lineSeg.ex], [lineSeg.sy, lineSeg.ey], style)
 
+    def drawRobot(self, x, y, theta):
+        y1 = robotDiamiter * math.sin(theta) + y
+        x1 = robotDiamiter * math.cos(theta) + x
+        # self.ax.Circle((x,y), radius=robotDiamiter, color='g', fill=False)
+        self.ax.plot([x,x1],[y,y1], '-b', linewidth=2)
+        self.ax.plot(robotBodyX+x,robotBodyY+y)
+        # self.ax.p
+
     def drawSimulator(self, sim):
         self.fig.clf()
-        self.ax = self.fig.add_subplot(111, xlim=[0,sim.width], ylim=[0,sim.height])
+        self.ax = self.fig.gca(xlim=[0,sim.width], ylim=[0,sim.height])
         self.ax.hold(True)
 
         # rect = [0,0,, sim.height]
 
         self.drawLine(sim, obstaclesStyle)
-        self.ax.relim()
+        self.drawRobot(sim.robotDOF.xy.x, sim.robotDOF.xy.y, sim.robotDOF.theta)
+        # self.ax.relim()
         # self.fig.show();
 
-        # self.figure.canvas.draw()
-        # self.figure.canvas.flush_events()
-        # import threading
-        # t = threading.Thread(plt.show())
-        # t.start()
+        self.fig.canvas.draw()
+        self.fig.canvas.flush_events()
 
 
 
