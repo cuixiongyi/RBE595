@@ -45,11 +45,46 @@ class LineSegment:
 
     @staticmethod
     def lineSegIntersectFastPreTest(line1, line2):
-        if LineSegment.__lineSegIntersectFastPreTestStep1(line2, line1[0][0], line1[0][1]):
+        l1p1x = line1[0][0]
+        l1p1y = line1[0][1]
+        l1p2x = line1[1][0]
+        l1p2y = line1[1][1]
+        # make sure p1x < p2x
+        if l1p1x > l1p2x:
+            tmp = l1p1x
+            l1p1x = l1p2x
+            l1p2x = tmp
+        # make sure p1y < p2y
+        if l1p1y > l1p2y:
+            tmp = l1p1y
+            l1p1y = l1p2y
+            l1p2y = tmp
+        l2p1x = line2[0][0]
+        l2p1y = line2[0][1]
+        l2p2x = line2[1][0]
+        l2p2y = line2[1][1]
+        # make sure p1x < p2x
+        if l2p1x > l2p2x:
+            tmp = l2p1x
+            l2p1x = l2p2x
+            l2p2x = tmp
+        # make sure p1y < p2y
+        if l2p1y > l2p2y:
+            tmp = l2p1y
+            l2p1y = l2p2y
+            l2p2y = tmp
+
+        # line2 rectangle is inside line1 rect
+        if l1p1x < l2p2x and l1p2x > l2p1x and l1p1y < l2p2y and l1p2y > l2p1y:
             return True
-        if LineSegment.__lineSegIntersectFastPreTestStep1(line2, line1[1][0], line1[1][1]):
+        # line2 rectangle is inside line1 rect
+        if l1p1x > l2p2x and l1p2x < l2p1x and l1p1y > l2p2y and l1p2y < l2p1y:
             return True
-        return False
+        if l1p1x > l2p2x or l1p2x < l2p1x:
+            return False
+        if l1p1y > l2p2y or l1p2y < l2p1y:
+            return False
+        return True
 
     @staticmethod
     def segment_intersect(line1, line2) :
@@ -85,7 +120,7 @@ class LineSegment:
     def slope(p1, p2) :
         limit =  10e-7
         if p2[0] - p1[0] < limit:
-            return 1/limit
+            return limit
         if p2[1] - p1[1] < 10e-7:
             return limit
         return (p2[1] - p1[1]) * 1. / (p2[0] - p1[0])
@@ -113,4 +148,4 @@ class LineSegment:
        y = m1 * x + b1
        y2 = m2 * x + b2
        # print( '(x,y,y2) = %d,%d,%d' % (x, y, y2))
-       return (int(x),int(y))
+       return (x,y)

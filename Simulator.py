@@ -19,6 +19,8 @@ class Simulator(threading.Thread):
         self.time = 0.0
         self.TIMEINC = 0.1
         self.robotDOF = ThreeDOF.ThreeDOF()
+        self.robotDOF.xy.x = 1
+        self.robotDOF.xy.y = 1
         self.utility = SimulatorUtility.SimulatorUtility(self)
         self.inputMove = ThreeDOF.ThreeDOF()
         self.obstacles = self.utility.initObstacles(self)
@@ -62,7 +64,7 @@ class Simulator(threading.Thread):
     def checkMovement(self, lineMovement):
         for obs in self.obstacles:
             ret = obs.checkLineSegCross(lineMovement)
-            # print(ret)
+            print(ret)
             if ret is not None:
                 print(ret)
                 return False
