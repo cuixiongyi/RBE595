@@ -16,7 +16,7 @@ robotBodyY = np.sin(np.linspace(0,2*math.pi, num=circleStep))*robotDiamiter
 class SimulatorUtility:
     def __init__(self, sim):
         self.fig = sim.fig
-        rect = [0,0,sim.width, sim.height]
+        rect = [sim.x0,sim.y0,sim.x1, sim.y1]
         self.ax = self.fig.add_axes(rect)
         self.lines, = self.ax.plot([],[], '-')
         # self.ax.set_xlim(sim.width, sim.height)
@@ -26,10 +26,10 @@ class SimulatorUtility:
     def initObstacles(self, sim):
 
         obstacle = []
-        obstacle.append(LineSegment(0,0,0,sim.height))
-        obstacle.append(LineSegment(0,sim.height,sim.width,sim.height))
-        obstacle.append(LineSegment(sim.width,sim.height,sim.width,0))
-        obstacle.append(LineSegment(sim.width,0,0,0))
+        obstacle.append(LineSegment(sim.x0,sim.y0,sim.x0,sim.y1))
+        obstacle.append(LineSegment(sim.x0,sim.y1,sim.x1,sim.y1))
+        obstacle.append(LineSegment(sim.x1,sim.y1,sim.x1,sim.y0))
+        obstacle.append(LineSegment(sim.x1,sim.y0,sim.x0,sim.y0))
 
         obstacle.append(LineSegment(100, 100, 100, 50))
         obstacle.append(LineSegment(100, 50, 50, 50))
@@ -78,7 +78,7 @@ class SimulatorUtility:
 
     def drawSimulator(self, sim):
         self.fig.clf()
-        self.ax = self.fig.gca(xlim=[0,sim.width], ylim=[0,sim.height])
+        self.ax = self.fig.gca(xlim=[sim.x0,sim.x1], ylim=[sim.y0,sim.y1])
         self.ax.hold(True)
 
         # rect = [0,0,, sim.height]

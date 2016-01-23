@@ -16,6 +16,10 @@ class Simulator(threading.Thread):
         self.pathTrackOn = True;
         self.height = 400
         self.width = 600
+        self.x0 = 0
+        self.y0 = 0
+        self.x1 = self.x0 + self.width
+        self.y1 = self.y0 + self.height
         self.time = 0.0
         self.TIMEINC = 0.1
         self.robotDOF = ThreeDOF.ThreeDOF()
