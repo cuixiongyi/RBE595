@@ -6,7 +6,8 @@ import math
 import numpy as np
 __author__ = 'xiongyi'
 
-obstaclesStyle = '-b'
+StyleObstacles = '-b'
+StyleMeasure = '-r'
 robotDiamiter = 12;
 
 circleStep = 50
@@ -55,13 +56,13 @@ class SimulatorUtility:
             else:
                 self.lines.set_xdata(xdata)
                 self.lines.set_ydata(ydata)
-                self.ax.plot(xdata,ydata, obstaclesStyle)
+                self.ax.plot(xdata,ydata, StyleObstacles)
                 # self.ax.add_line(self.lines)
 
                 # self.lines = mline.Line2D(xdata,ydata)
                 xdata = [line.sx, line.ex]
                 ydata = [line.sy, line.ey]
-        self.ax.plot(xdata,ydata, obstaclesStyle)
+        self.ax.plot(xdata,ydata, StyleObstacles)
 
         # xdata.append(sim.obstacles[0].sx)
         # ydata.append(sim.obstacles[0].sy)
@@ -76,6 +77,16 @@ class SimulatorUtility:
         self.ax.plot(robotBodyX+x,robotBodyY+y)
         # self.ax.p
 
+    def drawMeasure(self, sim):
+        if sim.measureHits is None:
+            return
+        x0 = sim.robotDOF.xy.x
+        y0 = sim.robotDOF.xy.y
+        for xy in sim.measureHits:
+            self.ax.plot([x0,xy[0]],[y0,xy[1]], StyleMeasure)
+
+
+
     def drawSimulator(self, sim):
         self.fig.clf()
         self.ax = self.fig.gca(xlim=[sim.x0,sim.x1], ylim=[sim.y0,sim.y1])
@@ -83,8 +94,9 @@ class SimulatorUtility:
 
         # rect = [0,0,, sim.height]
 
-        self.drawLine(sim, obstaclesStyle)
+        self.drawLine(sim, StyleObstacles)
         self.drawRobot(sim.robotDOF.xy.x, sim.robotDOF.xy.y, sim.robotDOF.theta)
+        self.drawMeasure(sim)
         # self.ax.relim()
         # self.fig.show();
 

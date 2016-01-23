@@ -2,6 +2,7 @@ __author__ = 'xiongyi'
 import ThreeDOF
 from LineSegment import *
 import SimulatorUtility
+import SimulatorMeasure
 import threading
 import math
 import random
@@ -28,18 +29,22 @@ class Simulator(threading.Thread):
         self.utility = SimulatorUtility.SimulatorUtility(self)
         self.inputMove = ThreeDOF.ThreeDOF()
         self.obstacles = self.utility.initObstacles(self)
-        # threading.Thread.run()
+        self.measureDists = []
+        self.measureHits = []
 
 
     def run(self):
-        print(self.robotDOF.xy.x, self.robotDOF.xy.y, self.robotDOF.theta)
+        print('\n\n\n\n\n')
+        print('robot xy = ', self.robotDOF.xy.x, self.robotDOF.xy.y, self.robotDOF.theta)
 
         self.time += self.TIMEINC
-        step = 5
-        self.inputMove.xy.x = random.uniform(0,step)
-        self.inputMove.xy.y = random.uniform(0,step)
+        moveStep = 7
+        self.inputMove.xy.x = random.uniform(0,moveStep)
+        self.inputMove.xy.y = random.uniform(0,moveStep)
         self.moveTo(self.inputMove)
-        self.utility.drawSimulator(self);
+        SimulatorMeasure.SimulatorMeasure.measure(self)
+        # print(self.measureDists)
+        self.utility.drawSimulator(self)
         self.canvas.draw()
         self.canvas.flush_events()
         # self.canvas.show()
@@ -58,6 +63,7 @@ class Simulator(threading.Thread):
                                                self.robotDOF.xy.y+inputMoveDOF.xy.y)
 
         if self.checkMovement(lineMovement):
+        # if True:
             self.robotDOF.xy.x = lineMovement.ex
             self.robotDOF.xy.y = lineMovement.ey
             self.robotDOF.xy.theta = self.robotDOF.theta + inputMoveDOF.theta
@@ -75,3 +81,4 @@ class Simulator(threading.Thread):
                 return False
         else:
             return True
+

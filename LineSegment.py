@@ -75,32 +75,50 @@ class LineSegment:
             return None
         xy = LineSegment.__segment_intersect_inner(line1, line2, xy)
         # if xy is None:
-        #     print('Seg interset inner pass')
+            # print('Seg interset inner pass')
         return xy
 
 
     @staticmethod
     def __segment_intersect_inner(line1, line2, xy) :
+
+        limit = 10e-6
+
+        if LineSegment.__segment_intersect_helper(line1, xy, limit):
+            if LineSegment.__segment_intersect_helper(line2, xy, limit):
+                return xy
+        return None
+
+    @staticmethod
+    def __segment_intersect_helper(line, xy, limit):
         x = xy[0]
         y = xy[1]
-        if (line1.sx < line1.ex) :
-            if x < line1.sx or x > line1.ex :
-                # print( 'exit 1' )
-                return None
-        else :
-            if x < line1.ex or x > line1.sx:
-                # print( 'exit 2' )
-                return None
-        if (line2.sx < line2.ex) :
-            if x < line2.sx or x > line2.ex :
-                # print( 'exit 3' )
-                return None
-        else :
-            if x < line2.ex or x > line2.sx:
-                # print( 'exit 4' )
-                return None
+        count = 0
+        limX = min(math.fabs(x - line.sx), math.fabs(x - line.ex))
+        limY = min(math.fabs(y - line.sy), math.fabs(y - line.ey))
+        if limX > limit:
+            if (line.sx < line.ex) :
+                if x < line.sx or x > line.ex:
+                    count += 1
+                    return False
+                    # print( 'exit 1' )
+            elif x < line.ex or x > line.sx:
+                    count += 1
+                    return False
 
-        return xy
+                    # print( 'exit 2' )
+        elif limY > limit:
+            if line.sy < line.ey:
+                if y < line.sy or y > line.ey:
+                    return False
+            elif y > line.sy or y < line.ey:
+                return False
+        # else:
+        #
+        # if count == 2:
+        #     return False
+
+        return True
 
     @staticmethod
     def line_intersect(line1, line2):
@@ -116,8 +134,8 @@ class LineSegment:
         # [ x, y  :=  solution to the simultaneous linear equations
         #       (self.a * x + self.b * y = -self.c) and
         #       (other.a * x + other.b * y = -other.c) ]
-        a = np.array ( ( (line1.a, line1.b), (line2.a, line2.b) ) )
-        b = np.array ( (-line1.c, -line2.c) )
+        a = np.array ( ( (line1.a, line1.b), (line2.a, line2.b) ) , dtype='float64')
+        b = np.array ( (-line1.c, -line2.c) , dtype='float64')
         x, y = np.linalg.solve(a,b)
 
         #-- 3 --

@@ -15,18 +15,24 @@ class Periodic(object):
         self.args = args
         self.kwargs = kwargs
         self._stopped = True
+        self.count = 0
+        self.goal = 30
         if kwargs.pop('autostart', True):
             self.start()
 
     def start(self, from_run=False):
         self._lock.acquire()
         if from_run or self._stopped:
+
             # if from_run and self._timer is not None:
             #     self._timer.join()
             self._stopped = False
             self._timer = Timer(self.interval, self._run)
             self._timer.start()
         self._lock.release()
+        self.count += 1
+        if self.count >= self.goal:
+            self.stop()
 
     def _run(self):
         self.start(from_run=True)
