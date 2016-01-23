@@ -37,8 +37,8 @@ class SimulatorUtility:
         obstacle.append(LineSegment(50, 100, 100, 100))
 
         obstacle.append(LineSegment(200, 300, 250, 400))
-        obstacle.append(LineSegment(250, 400, 300, 100))
         obstacle.append(LineSegment(300, 100, 200, 300))
+        obstacle.append(LineSegment(250, 400, 300, 100))
 
         return obstacle
 

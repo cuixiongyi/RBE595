@@ -31,8 +31,9 @@ class Simulator(threading.Thread):
         print(self.robotDOF.xy.x, self.robotDOF.xy.y, self.robotDOF.theta)
 
         self.time += self.TIMEINC
-        self.inputMove.xy.x = random.uniform(3,7)
-        self.inputMove.xy.y = random.uniform(3,7)
+        step = 5
+        self.inputMove.xy.x = random.uniform(0,step)
+        self.inputMove.xy.y = random.uniform(0,step)
         self.moveTo(self.inputMove)
         self.utility.drawSimulator(self);
         self.canvas.draw()
@@ -49,12 +50,12 @@ class Simulator(threading.Thread):
     def moveTo(self, inputMoveDOF):
         lineMovement = LineSegment(self.robotDOF.xy.x,
                                                self.robotDOF.xy.y,
-                                               inputMoveDOF.xy.x,
-                                               inputMoveDOF.xy.y)
+                                               self.robotDOF.xy.x+inputMoveDOF.xy.x,
+                                               self.robotDOF.xy.y+inputMoveDOF.xy.y)
 
         if self.checkMovement(lineMovement):
-            self.robotDOF.xy.x = self.robotDOF.xy.x + inputMoveDOF.xy.x
-            self.robotDOF.xy.y = self.robotDOF.xy.y + inputMoveDOF.xy.y
+            self.robotDOF.xy.x = lineMovement.ex
+            self.robotDOF.xy.y = lineMovement.ey
             self.robotDOF.xy.theta = self.robotDOF.theta + inputMoveDOF.theta
             return True
         else:
@@ -64,7 +65,7 @@ class Simulator(threading.Thread):
     def checkMovement(self, lineMovement):
         for obs in self.obstacles:
             ret = obs.checkLineSegCross(lineMovement)
-            print(ret)
+            # print(ret)
             if ret is not None:
                 print(ret)
                 return False
