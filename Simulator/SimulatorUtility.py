@@ -1,9 +1,5 @@
-import ThreeDOF
-from LineSegment import *
-import matplotlib.pyplot as plt
-import matplotlib.lines as mline
-import math
-import numpy as np
+from Simulator.Geometry.LineSegment import *
+
 __author__ = 'xiongyi'
 
 StyleObstacles = '-b'

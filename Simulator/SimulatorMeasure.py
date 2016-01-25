@@ -1,6 +1,9 @@
-from LineSegment import LineSegment
-import numpy as np
 import math
+
+import numpy as np
+
+from Simulator.Geometry.LineSegment import LineSegment
+
 __author__ = 'xiongyi'
 
 bins_num = 9

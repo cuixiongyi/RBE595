@@ -1,5 +1,7 @@
 __author__ = 'xiongyi'
-import Coordinate
+from DataType import Coordinate
+
+
 class ThreeDOF:
     def __init__(self):
         self.xy = Coordinate.Coordinate()

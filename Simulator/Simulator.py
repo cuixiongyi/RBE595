@@ -1,13 +1,13 @@
 __author__ = 'xiongyi'
-import ThreeDOF
-from LineSegment import *
-import SimulatorUtility
-import SimulatorMeasure
-import threading
-import math
 import random
-import tkinter as tk
-import numpy as np
+import threading
+
+import SimulatorMeasure
+
+from DataType import ThreeDOF
+from Simulator import SimulatorUtility
+from Simulator.Geometry.LineSegment import *
+
 
 class Simulator(threading.Thread):
 

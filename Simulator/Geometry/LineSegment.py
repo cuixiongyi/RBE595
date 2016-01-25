@@ -1,6 +1,7 @@
-import Coordinate
-import numpy as np
 import math
+
+import numpy as np
+
 __author__ = 'xiongyi'
 
 class LineSegment:
