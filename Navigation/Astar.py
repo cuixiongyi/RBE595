@@ -57,17 +57,18 @@ class Astar:
                 if self.testBin(current, binTmp):
                     neighbor.append(binTmp)
 
+            g_inc = self.map.bin_size
             for bin in neighbor:
                 if bin in closed_set:
                     continue
 
                 if bin in open_set:
-                    g = current.G + 1
+                    g = current.G + g_inc
                     if bin.G > g:
                         bin.G = g
                         bin.parent = current
                 else:
-                    bin.G = current.G + 1
+                    bin.G = current.G + g_inc
                     bin.H = self.manhattan(bin)
                     bin.parent = current
                     open_set.add(bin)

@@ -8,7 +8,7 @@ map_height_bin_num_g = 0
 
 class Map:
     def __init__(self, sim):
-        self.map_bin_num = 100
+        self.map_bin_num = 80
         self.map_height_bin_num = self.map_bin_num
         self.bin_size = sim.height / self.map_bin_num
         self.map_width_bin_num = round(self.map_bin_num * sim.width / sim.height)

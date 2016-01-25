@@ -2,8 +2,8 @@ from Simulator.Geometry.LineSegment import *
 
 __author__ = 'xiongyi'
 
-StyleObstacles = '-b'
-StyleMeasure = '-r'
+StyleObstacles = '-k'
+StyleMeasure = '--b'
 robotDiamiter = 12;
 
 circleStep = 50
@@ -29,9 +29,9 @@ class SimulatorUtility:
         obstacle.append(LineSegment(sim.x1,sim.y0,sim.x0,sim.y0))
 
         obstacle.append(LineSegment(100, 100, 100, 50))
-        obstacle.append(LineSegment(100, 50, 50, 50))
-        obstacle.append(LineSegment(50, 50, 50, 100))
-        obstacle.append(LineSegment(50, 100, 100, 100))
+        obstacle.append(LineSegment(100, 50, 500, 50))
+        obstacle.append(LineSegment(500, 50, 500, 100))
+        obstacle.append(LineSegment(500, 100, 100, 100))
 
         obstacle.append(LineSegment(200, 300, 250, 400))
         obstacle.append(LineSegment(300, 100, 200, 300))
