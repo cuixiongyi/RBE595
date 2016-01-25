@@ -10,3 +10,6 @@ class SimpleMapBin:
         self.y0 = y0
         self.id = binID(idX, idY)
         self.isObstacle = None
+        self.G = 0
+        self.H = 0
+        self.parent = None

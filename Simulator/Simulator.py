@@ -2,11 +2,11 @@ __author__ = 'xiongyi'
 import random
 import threading
 
-import Simulator.SimulatorMeasure
 
 from DataType import ThreeDOF, Coordinate
-from Simulator import SimulatorUtility
-from Simulator import SimulatorMeasure
+from Simulator import *
+from Simulator.SimulatorMeasure import *
+from Simulator.SimulatorUtility import *
 from Simulator.Geometry.LineSegment import *
 
 
@@ -27,7 +27,7 @@ class Simulator(threading.Thread):
         self.robotDOF = ThreeDOF.ThreeDOF()
         self.robotDOF.xy.x = 1
         self.robotDOF.xy.y = 1
-        self.utility = SimulatorUtility.SimulatorUtility(self)
+        self.utility = SimulatorUtility(self)
         self.inputMove = ThreeDOF.ThreeDOF()
         self.obstacles = self.utility.initObstacles(self)
         self.measureDists = []
@@ -37,7 +37,7 @@ class Simulator(threading.Thread):
 
 
     def run(self):
-        print('\n\n\n\n\n')
+        print('\n\n')
         print('robot xy = ', self.robotDOF.xy.x, self.robotDOF.xy.y, self.robotDOF.theta)
 
         self.time += self.TIMEINC
@@ -45,7 +45,7 @@ class Simulator(threading.Thread):
         self.inputMove.xy.x = random.uniform(0,moveStep)
         self.inputMove.xy.y = random.uniform(0,moveStep)
         self.moveTo(self.inputMove)
-        SimulatorMeasure.SimulatorMeasure.measure(self)
+        SimulatorMeasure.measure(self)
         # print(self.measureDists)
         self.utility.drawSimulator(self)
         self.canvas.draw()
@@ -65,7 +65,7 @@ class Simulator(threading.Thread):
                                                self.robotDOF.xy.x+inputMoveDOF.xy.x,
                                                self.robotDOF.xy.y+inputMoveDOF.xy.y)
 
-        if self.checkMovement(lineMovement):
+        if Simulator.checkMovement(self.obstacles, lineMovement):
         # if True:
             self.robotDOF.xy.x = lineMovement.ex
             self.robotDOF.xy.y = lineMovement.ey
@@ -75,8 +75,9 @@ class Simulator(threading.Thread):
             return False
 
     # inpute relative translation
-    def checkMovement(self, lineMovement):
-        for obs in self.obstacles:
+    @staticmethod
+    def checkMovement(obstacles, lineMovement):
+        for obs in obstacles:
             ret = obs.checkLineSegCross(lineMovement)
             # print(ret)
             if ret is not None:

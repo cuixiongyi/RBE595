@@ -21,7 +21,7 @@ class SimulatorMeasure:
         measureHits = []
         for deg in degs:
             line = SimulatorMeasure.makeObserveLineSeg(sim, deg, sim.robotDOF.xy.x, sim.robotDOF.xy.y)
-            print('\ndeg = ', deg, line.sx, line.sy, line.ex, line.ey)
+            # print('\ndeg = ', deg, line.sx, line.sy, line.ex, line.ey)
 
             if line is None:
                 raise "measure LineSegment generate failed"
@@ -65,7 +65,7 @@ class SimulatorMeasure:
 
         if xyRet is None:
             raise "failed measure, hit no obstacles"
-        print('xy = ', xyRet)
+        # print('xy = ', xyRet)
         return [minDist, xyRet]
 
     @staticmethod

@@ -2,28 +2,41 @@ import Navigation.SimpleMapBin as Bin
 __author__ = 'xiongyi'
 
 
-map_bin_num = 200
-map_height_bin_num = map_bin_num
-map_width_bin_num = 0
-
+map_width_bin_num_g = 0
+map_height_bin_num_g = 0
 
 class Map:
     def __init__(self, sim):
-        global map_width_bin_num
-        global map_height_bin_num
-        self.bin_size = sim.height / map_bin_num
-        map_width_bin_num = map_bin_num * sim.width / sim.height
+        self.map_bin_num = 200
+        self.map_height_bin_num = self.map_bin_num
+        self.bin_size = sim.height / self.map_bin_num
+        self.map_width_bin_num = self.map_bin_num * sim.width / sim.height
+
+        global map_height_bin_num_g
+        map_height_bin_num_g = self.map_height_bin_num
+        global map_width_bin_num_g
+        map_width_bin_num_g = self.map_width_bin_num
+
+        self.sim = sim
+
         self.bins = []
         half_bin_size = 0.5 * self.bin_size
-        for ii in range(0, map_width_bin_num-1):
+        for ii in range(0, self.map_width_bin_num-1):
             self.bins.append([])
-            for jj in range(0, map_height_bin_num-1):
+            for jj in range(0, self.map_height_bin_num-1):
                 binTmp = Bin.SimpleMapBin(ii*self.bin_size+half_bin_size,
                                          jj*self.bin_size+half_bin_size,
                                          ii, jj)
                 self.bins[-1].append(binTmp)
 
-
+    # @staticmethod
+    def coor2Bin(self, x0, y0):
+        binX = (x0 - self.sim.x0) / self.bin_size
+        binY = (y0 - self.sim.y0) / self.bin_size
+        if binX in range(0, map_width_bin_num) and binY in range(0, map_height_bin_num):
+            return self.bins[binX][binY]
+        else:
+            raise "cooridnate out of range"
 
 
 
