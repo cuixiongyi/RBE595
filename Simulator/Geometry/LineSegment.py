@@ -2,6 +2,7 @@ import math
 
 import numpy as np
 
+# Reference http://blog.sina.com.cn/s/blog_906a5acc0101dlwg.html
 __author__ = 'xiongyi'
 
 class LineSegment:

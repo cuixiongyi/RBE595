@@ -3,7 +3,7 @@ import tkinter as tk
 import matplotlib
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.figure import Figure
-import Simulator
+import Simulator.Simulator
 from Periodic import Periodic
 
 class Application(tk.Frame):
@@ -21,7 +21,7 @@ class Application(tk.Frame):
         self.canvas = FigureCanvasTkAgg(self.fig, self)
         self.canvas.show()
         self.canvas.get_tk_widget().grid(row=0, columnspan=3)
-        sim = Simulator.Simulator(self.fig, self.canvas)
+        sim = Simulator.Simulator.Simulator(self.fig, self.canvas)
         # sim.run()
         self.timer = Periodic(1, sim.run)
         self.timer.start()

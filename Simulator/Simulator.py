@@ -2,10 +2,11 @@ __author__ = 'xiongyi'
 import random
 import threading
 
-import SimulatorMeasure
+import Simulator.SimulatorMeasure
 
-from DataType import ThreeDOF
+from DataType import ThreeDOF, Coordinate
 from Simulator import SimulatorUtility
+from Simulator import SimulatorMeasure
 from Simulator.Geometry.LineSegment import *
 
 
@@ -31,6 +32,8 @@ class Simulator(threading.Thread):
         self.obstacles = self.utility.initObstacles(self)
         self.measureDists = []
         self.measureHits = []
+        self.goal = Coordinate.Coordinate(400, 250)
+
 
 
     def run(self):

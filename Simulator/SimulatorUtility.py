@@ -7,8 +7,8 @@ StyleMeasure = '-r'
 robotDiamiter = 12;
 
 circleStep = 50
-robotBodyX = np.cos(np.linspace(0,2*math.pi, num=circleStep))*robotDiamiter
-robotBodyY = np.sin(np.linspace(0,2*math.pi, num=circleStep))*robotDiamiter
+circlePointX = np.cos(np.linspace(0,2*math.pi, num=circleStep))
+circlePointY = np.sin(np.linspace(0,2*math.pi, num=circleStep))
 
 class SimulatorUtility:
     def __init__(self, sim):
@@ -70,7 +70,7 @@ class SimulatorUtility:
         x1 = robotDiamiter * math.cos(theta) + x
         # self.ax.Circle((x,y), radius=robotDiamiter, color='g', fill=False)
         self.ax.plot([x,x1],[y,y1], '-b', linewidth=2)
-        self.ax.plot(robotBodyX+x,robotBodyY+y)
+        self.ax.plot(circlePointX*robotDiamiter+x,circlePointY*robotDiamiter+y)
         # self.ax.p
 
     def drawMeasure(self, sim):
@@ -80,6 +80,12 @@ class SimulatorUtility:
         y0 = sim.robotDOF.xy.y
         for xy in sim.measureHits:
             self.ax.plot([x0,xy[0]],[y0,xy[1]], StyleMeasure)
+
+    def drawGoalArea(self, sim):
+        if sim.goal is None:
+            return
+        goalArea = 25
+        self.ax.plot(circlePointX*goalArea+sim.goal.x,circlePointY*goalArea+sim.goal.y)
 
 
 
@@ -93,6 +99,7 @@ class SimulatorUtility:
         self.drawLine(sim, StyleObstacles)
         self.drawRobot(sim.robotDOF.xy.x, sim.robotDOF.xy.y, sim.robotDOF.theta)
         self.drawMeasure(sim)
+        self.drawGoalArea(sim)
         # self.ax.relim()
         # self.fig.show();
 
