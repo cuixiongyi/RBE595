@@ -88,6 +88,10 @@ class SimulatorUtility:
         self.ax.plot(circlePointX*goalArea+sim.goal.x,circlePointY*goalArea+sim.goal.y)
 
 
+    def drawAStar(self, sim):
+        if sim.astarPathX is None:
+            return
+        self.ax.plot(sim.astarPathX, sim.astarPathY)
 
     def drawSimulator(self, sim):
         self.fig.clf()
@@ -100,6 +104,7 @@ class SimulatorUtility:
         self.drawRobot(sim.robotDOF.xy.x, sim.robotDOF.xy.y, sim.robotDOF.theta)
         self.drawMeasure(sim)
         self.drawGoalArea(sim)
+        self.drawAStar(sim)
         # self.ax.relim()
         # self.fig.show();
 

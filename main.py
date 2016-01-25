@@ -23,7 +23,7 @@ class Application(tk.Frame):
         self.canvas.get_tk_widget().grid(row=0, columnspan=3)
         sim = Simulator.Simulator.Simulator(self.fig, self.canvas)
         # sim.run()
-        self.timer = Periodic(1, sim.run)
+        self.timer = Periodic(0.3, sim.run)
         self.timer.start()
 
 

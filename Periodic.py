@@ -16,7 +16,7 @@ class Periodic(object):
         self.kwargs = kwargs
         self._stopped = True
         self.count = 0
-        self.goal = 30
+        self.goal = 50
         if kwargs.pop('autostart', True):
             self.start()
 

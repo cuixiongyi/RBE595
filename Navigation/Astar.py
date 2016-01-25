@@ -19,14 +19,16 @@ class Astar:
         open_set = set()
         closed_set = set()
 
-        current = start
+        current = self.start
         open_set.add(current)
 
         while open_set:
             current = min(open_set, key=lambda bin: bin.G + bin.H)
             line_move = LineSegment.LineSegment(current.x0, current.y0, self.goal.x0, self.goal.y0)
-            if Simulator.Simulator.checkMovement(self.obstacles, line_move) is not None:
+            if Simulator.Simulator.checkMovement(self.obstacles, line_move):
                 path = []
+                path.append(self.goal)
+
                 while current.parent:
                     path.append(current)
                     current = current.parent
@@ -36,15 +38,24 @@ class Astar:
             open_set.remove(current)
             closed_set.add(current)
 
+
             neighbor = []
-            if current.id.binX > 0:
-                neighbor.append(self.map.bins[current.id.binX-1][current.id.binY])
+            if current.id.binX > 0 :
+                binTmp = self.map.bins[current.id.binX-1][current.id.binY]
+                if self.testBin(current, binTmp):
+                    neighbor.append(binTmp)
             if current.id.binX < self.map.map_width_bin_num-1:
-                neighbor.append(self.map.bins[current.id.binX+1][current.id.binY])
+                binTmp = self.map.bins[current.id.binX+1][current.id.binY]
+                if self.testBin(current, binTmp):
+                    neighbor.append(binTmp)
             if current.id.binY < self.map.map_height_bin_num-1:
-                neighbor.append(self.map.bins[current.id.binX][current.id.binY+1])
+                binTmp = self.map.bins[current.id.binX][current.id.binY+1]
+                if self.testBin(current, binTmp):
+                    neighbor.append(binTmp)
             if current.id.binY > 0:
-                neighbor.append(self.map.bins[current.id.binX][current.id.binY-1])
+                binTmp = self.map.bins[current.id.binX][current.id.binY-1]
+                if self.testBin(current, binTmp):
+                    neighbor.append(binTmp)
 
             for bin in neighbor:
                 if bin in closed_set:
@@ -57,7 +68,7 @@ class Astar:
                         bin.parent = current
                 else:
                     bin.G = current.G + 1
-                    bin.H = Astar.manhattan(bin)
+                    bin.H = self.manhattan(bin)
                     bin.parent = current
                     open_set.add(bin)
         raise "no path found"
@@ -69,6 +80,9 @@ class Astar:
     def manhattan(self, bin):
         return math.fabs(bin.x0-self.goal.x0) + math.fabs(bin.y0-self.goal.y0)
 
+    def testBin(self, current, binTmp):
+        line_move = LineSegment.LineSegment(current.x0, current.y0, binTmp.x0, binTmp.y0)
+        return Simulator.Simulator.checkMovement(self.obstacles, line_move)
 
 
 

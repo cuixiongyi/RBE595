@@ -37,17 +37,27 @@ class Simulator(threading.Thread):
         self.map = Map(self)
         self.astar = Astar(self, self.map)
         path = self.astar.calculate(self.robotDOF.xy, self.goal)
-        print(path)
+        self.astarPathX = []
+        self.astarPathY = []
+        # print('path = ', path)
+        for p in path:
+            self.astarPathX.append(p.x0)
+            self.astarPathY.append(p.y0)
+        self.pathCount = 0
 
 
     def run(self):
         print('\n\n')
         print('robot xy = ', self.robotDOF.xy.x, self.robotDOF.xy.y, self.robotDOF.theta)
 
+
         self.time += self.TIMEINC
         moveStep = 7
-        self.inputMove.xy.x = random.uniform(0,moveStep)
-        self.inputMove.xy.y = random.uniform(0,moveStep)
+        # self.inputMove.xy.x = random.uniform(0,moveStep)
+        # self.inputMove.xy.y = random.uniform(0,moveStep)
+        self.inputMove.xy.x = self.astarPathX[self.pathCount] - self.robotDOF.xy.x
+        self.inputMove.xy.y = self.astarPathY[self.pathCount] - self.robotDOF.xy.y
+        self.pathCount += 1
         self.moveTo(self.inputMove)
         SimulatorMeasure.measure(self)
         # print(self.measureDists)
@@ -64,7 +74,7 @@ class Simulator(threading.Thread):
             self.pathTrackOn = False
 
     def moveTo(self, inputMoveDOF):
-        lineMovement = LineSegment(self.robotDOF.xy.x,
+        lineMovement = LineSegment.LineSegment(self.robotDOF.xy.x,
                                                self.robotDOF.xy.y,
                                                self.robotDOF.xy.x+inputMoveDOF.xy.x,
                                                self.robotDOF.xy.y+inputMoveDOF.xy.y)
@@ -85,7 +95,7 @@ class Simulator(threading.Thread):
             ret = obs.checkLineSegCross(lineMovement)
             # print(ret)
             if ret is not None:
-                print(ret)
+                # print(ret)
                 return False
         else:
             return True
