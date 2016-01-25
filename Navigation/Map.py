@@ -1,4 +1,5 @@
 import Navigation.SimpleMapBin as Bin
+import math
 __author__ = 'xiongyi'
 
 
@@ -10,7 +11,7 @@ class Map:
         self.map_bin_num = 200
         self.map_height_bin_num = self.map_bin_num
         self.bin_size = sim.height / self.map_bin_num
-        self.map_width_bin_num = self.map_bin_num * sim.width / sim.height
+        self.map_width_bin_num = round(self.map_bin_num * sim.width / sim.height)
 
         global map_height_bin_num_g
         map_height_bin_num_g = self.map_height_bin_num
@@ -31,9 +32,9 @@ class Map:
 
     # @staticmethod
     def coor2Bin(self, x0, y0):
-        binX = (x0 - self.sim.x0) / self.bin_size
-        binY = (y0 - self.sim.y0) / self.bin_size
-        if binX in range(0, map_width_bin_num) and binY in range(0, map_height_bin_num):
+        binX = round((x0 - self.sim.x0) / self.bin_size)
+        binY = round((y0 - self.sim.y0) / self.bin_size)
+        if binX in range(0, map_width_bin_num_g) and binY in range(0, map_height_bin_num_g):
             return self.bins[binX][binY]
         else:
             raise "cooridnate out of range"

@@ -12,8 +12,8 @@ class Astar:
 
     # input start Coordinate, goal Coor
     def calculate(self, start, goal):
-        self.goal = self.map.coor2Bin(goal)
-        self.start = self.map.coor2Bin(start)
+        self.goal = self.map.coor2Bin(goal.x, goal.y)
+        self.start = self.map.coor2Bin(start.x, start.y)
         if self.goal is None:
             raise "A* algorithm: no goal is specified"
         open_set = set()

@@ -8,7 +8,8 @@ from Simulator import *
 from Simulator.SimulatorMeasure import *
 from Simulator.SimulatorUtility import *
 from Simulator.Geometry.LineSegment import *
-
+from Navigation.Astar  import *
+from Navigation.Map  import *
 
 class Simulator(threading.Thread):
 
@@ -33,7 +34,10 @@ class Simulator(threading.Thread):
         self.measureDists = []
         self.measureHits = []
         self.goal = Coordinate.Coordinate(400, 250)
-
+        self.map = Map(self)
+        self.astar = Astar(self, self.map)
+        path = self.astar.calculate(self.robotDOF.xy, self.goal)
+        print(path)
 
 
     def run(self):
